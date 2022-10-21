@@ -2,7 +2,7 @@ from django.shortcuts import render, reverse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from .models import Video
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 def index(request):
@@ -23,12 +23,13 @@ class CreateVideo(LoginRequiredMixin, CreateView):
 		return reverse('video-detail', kwargs={'pk': self.object.pk})
 
 
+
 class DetailVideo(DetailView):
 	model = Video
 	template_name = 'videos/detail_video.html'
 
 
-class UpdateVideo(LoginRequiredMixin, UpdateView):
+class UpdateVideo(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Video
 	fields = ['title', 'description']
 	template_name = 'videos/create_video.html'
@@ -36,10 +37,18 @@ class UpdateVideo(LoginRequiredMixin, UpdateView):
 	def get_success_url(self):
 		return reverse('video-detail', kwargs={'pk': self.object.pk})
 
+	def test_func(self):
+		video = self.get_object()
+		return self.request.user == video.uploader
+		
 
-class DeleteVideo(LoginRequiredMixin, DeleteView):
+class DeleteVideo(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 	model = Video
 	template_name = 'videos/delete_video.html'
 
 	def get_success_url(self):
 		return reverse('index')
+	
+	def test_func(self):
+		video = self.get_object()
+		return self.request.user == video.uploader
