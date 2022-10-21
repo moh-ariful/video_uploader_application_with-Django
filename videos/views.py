@@ -15,6 +15,10 @@ class CreateVideo(LoginRequiredMixin, CreateView):
 	fields = ['title', 'description', 'video_file', 'thumbnail']
 	template_name = 'videos/create_video.html'
 
+	def form_valid(self, form):
+		form.instance.uploader = self.request.user
+		return super().form_valid(form)
+
 	def get_success_url(self):
 		return reverse('video-detail', kwargs={'pk': self.object.pk})
 
