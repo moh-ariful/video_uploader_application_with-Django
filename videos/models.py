@@ -11,6 +11,28 @@ class Video(models.Model):
 	video_file = models.FileField(upload_to='uploads/video_files', validators = [FileExtensionValidator(allowed_extensions=['mp4'])])
 	thumbnail = models.FileField(upload_to='uploads/thumbnails', validators = [FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg'])])
 	date_posted = models.DateTimeField(default=timezone.now)
+	category = models.ForeignKey('Category', on_delete=models.CASCADE)
 
 	def __str__(self):
 		return self.title
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=33)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    video = models.ForeignKey('Video', on_delete=models.CASCADE)
+    comment = models.TextField(max_length=199)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'User: {self.user} | Created On: {self.created_on.strftime("%b %d %Y %I:%M %p")}'
