@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{% block head_title %}{% endblock %}</title>
+    <title>{% block head_title %}Video Share Uploder{% endblock %}</title>
     {% block extra_head %}
     {% include 'videos/navigation.html' %}
     {% endblock %}
@@ -13,11 +13,11 @@
 
     <link href="https://vjs.zencdn.net/7.8.3/video-js.css" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="/media/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
 
     <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
   	<script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
-    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
 
   </head>
   <body>
